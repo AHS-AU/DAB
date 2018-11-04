@@ -27,7 +27,13 @@ namespace BookService.Controllers
         // GET: api/Books
         public IQueryable<Book> GetBooks()
         {
-            return db.Books;
+            //// Standard: where it returns author = null
+            //return db.Books;
+
+            // Eager Loading
+            return db.Books
+                .Include(b => b.Author);
+
         }
 
         /// <summary>

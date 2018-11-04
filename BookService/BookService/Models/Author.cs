@@ -18,5 +18,8 @@ namespace BookService.Models
         /// </summary>
         [Required]
         public string Name { get; set; }
+
+        // Dont add navigation property to the corresponding one!!!
+        //public ICollection<Book> Books { get; set; }
     }
 }

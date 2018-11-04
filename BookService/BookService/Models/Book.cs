@@ -34,10 +34,12 @@ namespace BookService.Models
         /// Foreign Key (AuthorId) of Book
         /// </summary>
         public int AuthorId { get; set; }
+
         /// <summary>
         /// Navigation propery of Author
         /// </summary>
-        public Author Author { get; set; }
+        public Author Author { get; set; }    // Standard
+        //public virtual Author Author { get; set; }  // Lazy Loading => enable virtual
 
     }
 }
