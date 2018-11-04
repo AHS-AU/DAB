@@ -25,15 +25,17 @@ namespace BookService.Controllers
         /// </summary>
         /// <returns></returns>
         // GET: api/Books
-        public IQueryable<Book> GetBooks()
+        public IQueryable<BookDTO> GetBooks()
         {
-            //// Standard: where it returns author = null
-            //return db.Books;
+            var books = from b in db.Books
+                        select new BookDTO()
+                        {
+                            Id = b.Id,
+                            Title = b.Title,
+                            AuthorName = b.Author.Name
+                        };
 
-            // Eager Loading
-            return db.Books
-                .Include(b => b.Author);
-
+            return books;
         }
 
         /// <summary>
@@ -42,10 +44,19 @@ namespace BookService.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         // GET: api/Books/5
-        [ResponseType(typeof(Book))]
+        [ResponseType(typeof(BookDetailDTO))]
         public async Task<IHttpActionResult> GetBook(int id)
         {
-            Book book = await db.Books.FindAsync(id);
+            var book = await db.Books.Include(b => b.Author).Select(b =>
+                new BookDetailDTO()
+                {
+                    Id = b.Id,
+                    Title = b.Title,
+                    Year = b.Year,
+                    Price = b.Price,
+                    AuthorName = b.Author.Name,
+                    Genre = b.Genre
+                }).SingleOrDefaultAsync(b => b.Id == id);
             if (book == null)
             {
                 return NotFound();
@@ -101,7 +112,7 @@ namespace BookService.Controllers
         /// <param name="book"></param>
         /// <returns></returns>
         // POST: api/Books
-        [ResponseType(typeof(Book))]
+        [ResponseType(typeof(BookDTO))]
         public async Task<IHttpActionResult> PostBook(Book book)
         {
             if (!ModelState.IsValid)
@@ -112,7 +123,18 @@ namespace BookService.Controllers
             db.Books.Add(book);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = book.Id }, book);
+            // New code:
+            // Load author name
+            db.Entry(book).Reference(x => x.Author).Load();
+
+            var dto = new BookDTO()
+            {
+                Id = book.Id,
+                Title = book.Title,
+                AuthorName = book.Author.Name
+            };
+
+            return CreatedAtRoute("DefaultApi", new { id = book.Id }, dto);
         }
 
 
