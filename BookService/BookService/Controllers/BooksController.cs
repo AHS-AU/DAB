@@ -13,16 +13,28 @@ using BookService.Models;
 
 namespace BookService.Controllers
 {
+    /// <summary>
+    /// Bookcontroller
+    /// </summary>
     public class BooksController : ApiController
     {
         private BookServiceContext db = new BookServiceContext();
 
+        /// <summary>
+        /// Get all Books
+        /// </summary>
+        /// <returns></returns>
         // GET: api/Books
         public IQueryable<Book> GetBooks()
         {
             return db.Books;
         }
 
+        /// <summary>
+        /// Get Book with Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // GET: api/Books/5
         [ResponseType(typeof(Book))]
         public async Task<IHttpActionResult> GetBook(int id)
@@ -36,6 +48,12 @@ namespace BookService.Controllers
             return Ok(book);
         }
 
+        /// <summary>
+        /// Put Book
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="book"></param>
+        /// <returns></returns>
         // PUT: api/Books/5
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutBook(int id, Book book)
@@ -71,6 +89,11 @@ namespace BookService.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
+        /// <summary>
+        /// Post Book
+        /// </summary>
+        /// <param name="book"></param>
+        /// <returns></returns>
         // POST: api/Books
         [ResponseType(typeof(Book))]
         public async Task<IHttpActionResult> PostBook(Book book)
@@ -86,6 +109,12 @@ namespace BookService.Controllers
             return CreatedAtRoute("DefaultApi", new { id = book.Id }, book);
         }
 
+
+        /// <summary>
+        /// Delete Book with Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // DELETE: api/Books/5
         [ResponseType(typeof(Book))]
         public async Task<IHttpActionResult> DeleteBook(int id)
@@ -102,6 +131,10 @@ namespace BookService.Controllers
             return Ok(book);
         }
 
+        /// <summary>
+        /// Dispose Book
+        /// </summary>
+        /// <param name="disposing"></param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -111,9 +144,16 @@ namespace BookService.Controllers
             base.Dispose(disposing);
         }
 
+        /// <summary>
+        /// Check if Book Exists by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         private bool BookExists(int id)
         {
             return db.Books.Count(e => e.Id == id) > 0;
         }
+
+      
     }
 }
