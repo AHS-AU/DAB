@@ -12,7 +12,8 @@
         //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Person()
         {
-            PersonAddresses = new List<Address>();
+            PrimaryAddress = new Address();
+            SecondaryAddresses = new List<Address>();
             Email = new List<Email>();
         }
 
@@ -22,15 +23,14 @@
         [Required]
         [StringLength(100)]
         public string FullName { get; set; }
+        //public int PrimaryAddress_AddressId { get; set; }
+
+        public virtual Address PrimaryAddress { get; set; }
 
         public virtual List<Email> Email { get; set; }
 
-        public int PrimaryAddress_AddressId { get; set; }
-
-        public virtual Address Address { get; set; }
-
         //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual List<Address> PersonAddresses { get; set; }
+        public virtual List<Address> SecondaryAddresses { get; set; }
 
     }
 }
