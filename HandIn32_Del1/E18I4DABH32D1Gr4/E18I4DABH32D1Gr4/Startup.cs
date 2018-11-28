@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using E18I4DABH32D1Gr4.Models;
 using Microsoft.EntityFrameworkCore;
 using E18I4DABH32D1Gr4.Contexts;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace E18I4DABH32D1Gr4
 {
@@ -33,6 +34,12 @@ namespace E18I4DABH32D1Gr4
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            // Register the Swagger generator, defining 1 or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+            });
+
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -52,6 +59,17 @@ namespace E18I4DABH32D1Gr4
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
+
 
             app.UseStaticFiles();
             app.UseCookiePolicy();

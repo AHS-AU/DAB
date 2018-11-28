@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace E18I4DABH32D1Gr4.Migrations
 {
     [DbContext(typeof(PersonContext))]
-    [Migration("20181123183109_PersonkartotekDB4")]
-    partial class PersonkartotekDB4
+    [Migration("20181128144850_after_api_controllers")]
+    partial class after_api_controllers
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

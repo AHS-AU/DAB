@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using E18I4DABH32D1Gr4.Contexts;
 using E18I4DABH32D1Gr4.Models;
 
 namespace E18I4DABH32D1Gr4.Controllers
 {
-    public class AddressesController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AddressesController : ControllerBase
     {
         private readonly PersonContext _context;
 
@@ -19,137 +21,101 @@ namespace E18I4DABH32D1Gr4.Controllers
             _context = context;
         }
 
-        // GET: Addresses
-        public async Task<IActionResult> Index()
+        // GET: api/Addresses
+        [HttpGet]
+        public IEnumerable<Address> GetAddress()
         {
-            var personContext = _context.Address.Include(a => a.City);
-            return View(await personContext.ToListAsync());
+            return _context.Address;
         }
 
-        // GET: Addresses/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: api/Addresses/5
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAddress([FromRoute] int id)
         {
-            if (id == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
-            }
-
-            var address = await _context.Address
-                .Include(a => a.City)
-                .FirstOrDefaultAsync(m => m.AddressId == id);
-            if (address == null)
-            {
-                return NotFound();
-            }
-
-            return View(address);
-        }
-
-        // GET: Addresses/Create
-        public IActionResult Create()
-        {
-            ViewData["CityId"] = new SelectList(_context.City, "CityId", "CityName");
-            return View();
-        }
-
-        // POST: Addresses/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AddressId,StreetAddress,AddressType,CityId")] Address address)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(address);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["CityId"] = new SelectList(_context.City, "CityId", "CityName", address.CityId);
-            return View(address);
-        }
-
-        // GET: Addresses/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
+                return BadRequest(ModelState);
             }
 
             var address = await _context.Address.FindAsync(id);
+
             if (address == null)
             {
                 return NotFound();
             }
-            ViewData["CityId"] = new SelectList(_context.City, "CityId", "CityName", address.CityId);
-            return View(address);
+
+            return Ok(address);
         }
 
-        // POST: Addresses/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AddressId,StreetAddress,AddressType,CityId")] Address address)
+        // PUT: api/Addresses/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutAddress([FromRoute] int id, [FromBody] Address address)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if (id != address.AddressId)
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            if (ModelState.IsValid)
+            _context.Entry(address).State = EntityState.Modified;
+
+            try
             {
-                try
-                {
-                    _context.Update(address);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AddressExists(address.AddressId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
             }
-            ViewData["CityId"] = new SelectList(_context.City, "CityId", "CityName", address.CityId);
-            return View(address);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!AddressExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
-        // GET: Addresses/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // POST: api/Addresses
+        [HttpPost]
+        public async Task<IActionResult> PostAddress([FromBody] Address address)
         {
-            if (id == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                return BadRequest(ModelState);
             }
 
-            var address = await _context.Address
-                .Include(a => a.City)
-                .FirstOrDefaultAsync(m => m.AddressId == id);
+            _context.Address.Add(address);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetAddress", new { id = address.AddressId }, address);
+        }
+
+        // DELETE: api/Addresses/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAddress([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var address = await _context.Address.FindAsync(id);
             if (address == null)
             {
                 return NotFound();
             }
 
-            return View(address);
-        }
-
-        // POST: Addresses/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var address = await _context.Address.FindAsync(id);
             _context.Address.Remove(address);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return Ok(address);
         }
 
         private bool AddressExists(int id)

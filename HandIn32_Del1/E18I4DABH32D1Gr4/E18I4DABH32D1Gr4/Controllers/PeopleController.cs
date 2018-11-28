@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using E18I4DABH32D1Gr4.Contexts;
 using E18I4DABH32D1Gr4.Models;
 
 namespace E18I4DABH32D1Gr4.Controllers
 {
-    public class PeopleController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class PeopleController : ControllerBase
     {
         private readonly PersonContext _context;
 
@@ -19,143 +21,101 @@ namespace E18I4DABH32D1Gr4.Controllers
             _context = context;
         }
 
-        // GET: People
-        public async Task<IActionResult> Index()
+        // GET: api/People
+        [HttpGet]
+        public IEnumerable<Person> GetPeople()
         {
-            var personContext = _context.People.Include(p => p.Address).Include(p => p.Email);
-            return View(await personContext.ToListAsync());
+            return _context.People;
         }
 
-        // GET: People/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: api/People/5
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPerson([FromRoute] int id)
         {
-            if (id == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
-            }
-
-            var person = await _context.People
-                .Include(p => p.Address)
-                .Include(p => p.Email)
-                .FirstOrDefaultAsync(m => m.PersonId == id);
-            if (person == null)
-            {
-                return NotFound();
-            }
-
-            return View(person);
-        }
-
-        // GET: People/Create
-        public IActionResult Create()
-        {
-            ViewData["AddressId"] = new SelectList(_context.Address, "AddressId", "StreetAddress");
-            ViewData["EmailId"] = new SelectList(_context.Email, "EmailId", "EmailAddress");
-            return View();
-        }
-
-        // POST: People/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PersonId,FullName,EmailId,AddressId")] Person person)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(person);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["AddressId"] = new SelectList(_context.Address, "AddressId", "StreetAddress", person.AddressId);
-            ViewData["EmailId"] = new SelectList(_context.Email, "EmailId", "EmailAddress", person.EmailId);
-            return View(person);
-        }
-
-        // GET: People/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
+                return BadRequest(ModelState);
             }
 
             var person = await _context.People.FindAsync(id);
+
             if (person == null)
             {
                 return NotFound();
             }
-            ViewData["AddressId"] = new SelectList(_context.Address, "AddressId", "StreetAddress", person.AddressId);
-            ViewData["EmailId"] = new SelectList(_context.Email, "EmailId", "EmailAddress", person.EmailId);
-            return View(person);
+
+            return Ok(person);
         }
 
-        // POST: People/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PersonId,FullName,EmailId,AddressId")] Person person)
+        // PUT: api/People/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutPerson([FromRoute] int id, [FromBody] Person person)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if (id != person.PersonId)
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            if (ModelState.IsValid)
+            _context.Entry(person).State = EntityState.Modified;
+
+            try
             {
-                try
-                {
-                    _context.Update(person);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PersonExists(person.PersonId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
             }
-            ViewData["AddressId"] = new SelectList(_context.Address, "AddressId", "StreetAddress", person.AddressId);
-            ViewData["EmailId"] = new SelectList(_context.Email, "EmailId", "EmailAddress", person.EmailId);
-            return View(person);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!PersonExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
-        // GET: People/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // POST: api/People
+        [HttpPost]
+        public async Task<IActionResult> PostPerson([FromBody] Person person)
         {
-            if (id == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                return BadRequest(ModelState);
             }
 
-            var person = await _context.People
-                .Include(p => p.Address)
-                .Include(p => p.Email)
-                .FirstOrDefaultAsync(m => m.PersonId == id);
+            _context.People.Add(person);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetPerson", new { id = person.PersonId }, person);
+        }
+
+        // DELETE: api/People/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePerson([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var person = await _context.People.FindAsync(id);
             if (person == null)
             {
                 return NotFound();
             }
 
-            return View(person);
-        }
-
-        // POST: People/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var person = await _context.People.FindAsync(id);
             _context.People.Remove(person);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return Ok(person);
         }
 
         private bool PersonExists(int id)
