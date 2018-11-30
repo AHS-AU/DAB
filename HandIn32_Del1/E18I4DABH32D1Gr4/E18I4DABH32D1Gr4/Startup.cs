@@ -12,6 +12,10 @@ using E18I4DABH32D1Gr4.Models;
 using Microsoft.EntityFrameworkCore;
 using E18I4DABH32D1Gr4.Contexts;
 using Swashbuckle.AspNetCore.Swagger;
+using E18I4DABH32D1Gr4.Core;
+using E18I4DABH32D1Gr4.Persistence;
+using E18I4DABH32D1Gr4.Core.IRepositories;
+using E18I4DABH32D1Gr4.Persistence.Repositories;
 
 namespace E18I4DABH32D1Gr4
 {
@@ -34,6 +38,10 @@ namespace E18I4DABH32D1Gr4
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddTransient(typeof(IUnitOfWork), typeof(UnitOfWork));
+            services.AddTransient(typeof(IPersonRepository), typeof(PersonRepository));
+            services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
             {
@@ -43,9 +51,11 @@ namespace E18I4DABH32D1Gr4
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            var connection = @"Server=(localdb)\mssqllocaldb;Database=Personkartotek;Trusted_Connection=True;ConnectRetryCount=0";
+            //var connection = @"Server=(localdb)\mssqllocaldb;Database=Personkartotek;Trusted_Connection=True;ConnectRetryCount=0";
+            var connection = @"Data Source=st-i4dab.uni.au.dk;Initial Catalog=E18I4DABau545208;User ID=E18I4DABau545208;Password=E18I4DABau545208;Connect Timeout=60;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             services.AddDbContext<PersonContext>
                 (options => options.UseSqlServer(connection));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

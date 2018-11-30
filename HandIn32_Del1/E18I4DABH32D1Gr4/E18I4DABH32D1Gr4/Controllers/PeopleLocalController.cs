@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using E18I4DABH32D1Gr4.Contexts;
 using E18I4DABH32D1Gr4.Models;
+using E18I4DABH32D1Gr4.Core;
 
 namespace E18I4DABH32D1Gr4.Controllers
 {
@@ -22,6 +23,7 @@ namespace E18I4DABH32D1Gr4.Controllers
         // GET: PeopleLocal
         public async Task<IActionResult> Index()
         {
+
             var personContext = _context.People.Include(p => p.Address).Include(p => p.Email);
             return View(await personContext.ToListAsync());
         }

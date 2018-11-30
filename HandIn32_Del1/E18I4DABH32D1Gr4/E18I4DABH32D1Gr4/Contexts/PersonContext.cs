@@ -21,8 +21,8 @@ namespace E18I4DABH32D1Gr4.Contexts
 
         public DbSet<Email> Email { get; set; }
 
-        public DbSet<E18I4DABH32D1Gr4.Models.Address> Address { get; set; }
+        public DbSet<Address> Address { get; set; }
 
-        public DbSet<E18I4DABH32D1Gr4.Models.City> City { get; set; }
+        public DbSet<City> City { get; set; }
     }
 }

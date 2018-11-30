@@ -1,4 +1,5 @@
 ﻿using E18I4DABH32D1Gr4.Contexts;
+using E18I4DABH32D1Gr4.Core;
 using E18I4DABH32D1Gr4.Core.IRepositories;
 using E18I4DABH32D1Gr4.Persistence.Repositories;
 using System;
@@ -8,10 +9,11 @@ using System.Threading.Tasks;
 
 namespace E18I4DABH32D1Gr4.Persistence
 {
-    public class UnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         //public ICityRepository CityRepository { get; }
-        public IPersonRepository PersonRepository { get; }
+        public IPersonRepository People { get; }
+
         //public IAddressRepository AddresseRepository { get; }
         //public IEmailRepository EmailRepository { get; }
 
@@ -21,19 +23,20 @@ namespace E18I4DABH32D1Gr4.Persistence
         {
             mContext = context;
             //CityRepository = new CityRepository(mContext);
-            PersonRepository = new PersonRepository(mContext);
+            People = new PersonRepository(mContext);
             //AddresseRepository = new AddresseRepository(mContext);
             //EmailRepository = new EmailRepository(mContext);
         }
 
-        public void Complete()
+        public int Complete()
         {
-            mContext.SaveChanges();
+            return mContext.SaveChanges();
         }
 
         public void Dispose()
         {
-            mContext?.Dispose();
+            //mContext?.Dispose();
+            mContext.Dispose();
         }
     }
 }

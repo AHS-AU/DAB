@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace E18I4DABH32D1Gr4.Migrations
 {
-    public partial class after_api_controllers : Migration
+    public partial class RepoControllerDone : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

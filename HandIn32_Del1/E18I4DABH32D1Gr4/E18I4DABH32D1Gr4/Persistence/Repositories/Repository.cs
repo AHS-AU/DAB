@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using E18I4DABH32D1Gr4.Contexts;
 using E18I4DABH32D1Gr4.Core.IRepositories;
@@ -45,6 +46,19 @@ namespace E18I4DABH32D1Gr4.Persistence.Repositories
         public void RemoveRange(IEnumerable<TEntity> entities)
         {
             db.Set<TEntity>().RemoveRange(entities);
+        }
+
+        //void IRepository<TEntity> RemoveRange(IEnumerable<TEntity> entities){
+
+        //}
+        public IEnumerable<TEntity> Find(Expression<Func<TEntity,bool>> isFound)
+        {
+            return db.Set<TEntity>().Where(isFound);
+        }
+
+        public void Put(TEntity entity)
+        {
+            db.Set<TEntity>().Update(entity);
         }
 
         public TEntity Get(int id)

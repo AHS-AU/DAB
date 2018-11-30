@@ -1,0 +1,7 @@
+﻿DROP TABLE Emails
+DROP TABLE Notes
+DROP TABLE AAPersons
+DROP TABLE AAs
+DROP TABLE ContactInfoes
+DROP TABLE People
+DROP TABLE Cities
