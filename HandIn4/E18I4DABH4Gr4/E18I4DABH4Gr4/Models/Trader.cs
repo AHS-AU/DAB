@@ -7,5 +7,14 @@ namespace E18I4DABH4Gr4.Models
 {
     public class Trader
     {
+        public string Id { get; set; }
+
+        public string ProducerId { get; set; }
+
+        public string ConsumerId { get; set; }
+
+        public string KWhTransferred { get; set; }
+
+        public DateTime TransferDate { get; set; }
     }
 }
