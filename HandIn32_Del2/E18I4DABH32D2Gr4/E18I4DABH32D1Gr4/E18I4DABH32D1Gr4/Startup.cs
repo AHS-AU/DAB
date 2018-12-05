@@ -8,9 +8,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using E18I4DABH32D1Gr4.Models;
+using Microsoft.EntityFrameworkCore;
+using E18I4DABH32D1Gr4.Contexts;
 using Swashbuckle.AspNetCore.Swagger;
 
-namespace E18I4DABH4Gr4
+namespace E18I4DABH32D1Gr4
 {
     public class Startup
     {
@@ -36,6 +39,7 @@ namespace E18I4DABH4Gr4
             {
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
             });
+
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -65,6 +69,7 @@ namespace E18I4DABH4Gr4
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
+
 
             app.UseStaticFiles();
             app.UseCookiePolicy();

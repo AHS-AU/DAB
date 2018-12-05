@@ -1,22 +1,31 @@
-﻿using E18I4DABH4Gr4.Models;
-using Microsoft.Azure.Documents;
-using Microsoft.Azure.Documents.Client;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using E18I4DABH32D1Gr4.Contexts;
+using E18I4DABH32D1Gr4.Core.IRepositories;
+using Microsoft.EntityFrameworkCore;
 
-namespace E18I4DABH4Gr4.Repositories
+
+// ADD THIS PART TO YOUR CODE
+using System.Net;
+using Microsoft.Azure.Documents;
+using Microsoft.Azure.Documents.Client;
+using Newtonsoft.Json;
+
+namespace E18I4DABH32D1Gr4.Persistence.Repositories
 {
-    public abstract class ProsumerRepository<TEntity> : IProsumerRepository<TEntity> where TEntity : class
+    public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
+
         private DocumentClient client;
 
         private string DatabaseName { get; }
         private string CollectionId { get; }
 
-        public ProsumerRepository(string databaseName, string collectionId)
-        {
+        public Repository(string databaseName, string collectionId)
+        {      
+
             client = new DocumentClient(
                 new Uri("https://localhost:8081"),
                 "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==");
@@ -26,6 +35,7 @@ namespace E18I4DABH4Gr4.Repositories
             createDatabase();
             createCollection();
         }
+
         private void createDatabase()
         {
             client.CreateDatabaseIfNotExistsAsync(new Database { Id = DatabaseName }).Wait();
@@ -35,6 +45,7 @@ namespace E18I4DABH4Gr4.Repositories
         {
             client.CreateDocumentCollectionIfNotExistsAsync(UriFactory.CreateDatabaseUri(DatabaseName), new DocumentCollection { Id = CollectionId }).Wait();
         }
+
         private Uri GetCollectionURI()
         {
             return UriFactory.CreateDocumentCollectionUri(DatabaseName, CollectionId);
@@ -47,7 +58,7 @@ namespace E18I4DABH4Gr4.Repositories
             return query;
         }
 
-        async Task IProsumerRepository<TEntity>.Add(TEntity entity)
+        async Task IRepository<TEntity>.Add(TEntity entity)
         {
             await AddHelper(entity);
         }
@@ -59,29 +70,31 @@ namespace E18I4DABH4Gr4.Repositories
             setId(entity, document.Resource.Id);
         }
 
-        async Task IProsumerRepository<TEntity>.Set(TEntity entity)
+       
+
+        async Task IRepository<TEntity>.Set(TEntity entity)
         {
             await client.ReplaceDocumentAsync(UriFactory.CreateDocumentUri(DatabaseName, CollectionId, getId(entity)), entity);
         }
+        
 
-
-        Task<TEntity> IProsumerRepository<TEntity>.Get(int id)
+        Task<TEntity> IRepository<TEntity>.Get(int id)
         {
             throw new NotImplementedException();
         }
 
-        IEnumerable<TEntity> IProsumerRepository<TEntity>.GetAll()
+        IEnumerable<TEntity> IRepository<TEntity>.GetAll()
         {
             return GetQuery().ToList();
         }
 
-        async Task IProsumerRepository<TEntity>.AddRange(IEnumerable<TEntity> entities)
+        async Task IRepository<TEntity>.AddRange(IEnumerable<TEntity> entities)
         {
             var tasks = entities.Select(AddHelper);
             await Task.WhenAll(tasks);
         }
 
-        async Task IProsumerRepository<TEntity>.Remove(TEntity entity)
+        async Task IRepository<TEntity>.Remove(TEntity entity)
         {
             await RemoveHelper(entity);
         }
@@ -91,28 +104,14 @@ namespace E18I4DABH4Gr4.Repositories
             await client.DeleteDocumentAsync(UriFactory.CreateDocumentUri(DatabaseName, CollectionId, getId(entity)));
         }
 
-        async Task IProsumerRepository<TEntity>.RemoveRange(IEnumerable<TEntity> entities)
+        async Task IRepository<TEntity>.RemoveRange(IEnumerable<TEntity> entities)
         {
             var tasks = entities.Select(RemoveHelper);
 
             await Task.WhenAll(tasks);
         }
 
-        protected string getId(Prosumer entity)
-        {
-            return entity.ProsumerId;
-        }
-
-        protected  void setId(Prosumer entity, string id)
-        {
-            entity.ProsumerId = id;
-        }
         protected abstract string getId(TEntity entity);
         protected abstract void setId(TEntity entity, string id);
-
-        public Prosumer GetProsumer(string name)
-        {
-            return GetQuery().Where(x => x.Name.ToLower() == name.ToLower()).ToList().FirstOrDefault();
-        }
     }
 }

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace E18I4DABH4Gr4
+namespace E18I4DABH32D1Gr4
 {
     public class Program
     {
@@ -18,7 +18,7 @@ namespace E18I4DABH4Gr4
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)  
+            WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>();
     }
 }
