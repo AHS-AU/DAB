@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using E18I4DABH4Gr4.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace E18I4DABH4Gr4
 {
@@ -30,6 +33,16 @@ namespace E18I4DABH4Gr4
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            // Register the Swagger generator, defining 1 or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+            });
+
+            // Create Database TraderDb
+            string mDbName = "TraderDB";
+            string mConnString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=" + mDbName + ";Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            services.AddDbContext<TraderContext>(options => options.UseSqlServer(mConnString));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -45,6 +58,16 @@ namespace E18I4DABH4Gr4
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "HandIn4 API V1");
+            });
 
             app.UseStaticFiles();
             app.UseCookiePolicy();
