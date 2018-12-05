@@ -74,7 +74,7 @@ namespace E18I4DABH4Gr4.Repositories
             return GetQuery().ToList();
         }
 
-        async Task IProsumerRepository<TEntity>.AddRange(IEnumerable<TEntity> entities)
+        async Task IRepository<TEntity>.AddRange(IEnumerable<TEntity> entities)
         {
             var tasks = entities.Select(AddHelper);
             await Task.WhenAll(tasks);
@@ -97,15 +97,15 @@ namespace E18I4DABH4Gr4.Repositories
             await Task.WhenAll(tasks);
         }
 
-        protected string getId(Prosumer entity)
-        {
-            return entity.ProsumerId;
-        }
+        //protected string getId(Prosumer entity)
+        //{
+        //    return entity.ProsumerId;
+        //}
 
-        protected void setId(Prosumer entity, string id)
-        {
-            entity.ProsumerId = id;
-        }
+        //protected void setId(Prosumer entity, string id)
+        //{
+        //    entity.ProsumerId = id;
+        //}
         protected abstract string getId(TEntity entity);
         protected abstract void setId(TEntity entity, string id);
 

@@ -13,11 +13,11 @@ namespace E18I4DABH4Gr4.Controllers
     [ApiController]
     public class ProsumerController : ControllerBase
     {
-        private IProsumerRepository<Prosumer> repo;
+        private IProsumerRepository repo;
 
-        public ProsumerController(IProsumerRepository<Prosumer> repo)
+        public ProsumerController()
         {
-            this.repo = repo;
+            repo = new ProsumerRepository();
         }
 
         // GET: api/People
