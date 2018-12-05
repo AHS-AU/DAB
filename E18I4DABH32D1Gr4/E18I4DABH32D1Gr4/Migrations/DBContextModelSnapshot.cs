@@ -37,7 +37,7 @@ namespace E18I4DABH32D1Gr4.Migrations
 
                     b.HasIndex("cityAtAddresscityId");
 
-                    b.ToTable("Address");
+                    b.ToTable("address");
                 });
 
             modelBuilder.Entity("E18I4DABH32D1Gr4.Models.City", b =>
@@ -54,7 +54,7 @@ namespace E18I4DABH32D1Gr4.Migrations
 
                     b.HasKey("cityId");
 
-                    b.ToTable("City");
+                    b.ToTable("city");
                 });
 
             modelBuilder.Entity("E18I4DABH32D1Gr4.Models.Email", b =>
@@ -71,7 +71,7 @@ namespace E18I4DABH32D1Gr4.Migrations
 
                     b.HasIndex("PersonId");
 
-                    b.ToTable("Email");
+                    b.ToTable("emailAddress");
                 });
 
             modelBuilder.Entity("E18I4DABH32D1Gr4.Models.Person", b =>
@@ -84,21 +84,19 @@ namespace E18I4DABH32D1Gr4.Migrations
                         .IsRequired()
                         .HasMaxLength(100);
 
-                    b.Property<int>("PrimaryAddress_AddressId");
-
-                    b.Property<int?>("addressId");
+                    b.Property<int?>("PrimaryAddressaddressId");
 
                     b.HasKey("PersonId");
 
-                    b.HasIndex("addressId");
+                    b.HasIndex("PrimaryAddressaddressId");
 
-                    b.ToTable("Person");
+                    b.ToTable("people");
                 });
 
             modelBuilder.Entity("E18I4DABH32D1Gr4.Models.Address", b =>
                 {
                     b.HasOne("E18I4DABH32D1Gr4.Models.Person")
-                        .WithMany("PersonAddresses")
+                        .WithMany("SecondaryAddresses")
                         .HasForeignKey("PersonId");
 
                     b.HasOne("E18I4DABH32D1Gr4.Models.City", "cityAtAddress")
@@ -117,9 +115,9 @@ namespace E18I4DABH32D1Gr4.Migrations
 
             modelBuilder.Entity("E18I4DABH32D1Gr4.Models.Person", b =>
                 {
-                    b.HasOne("E18I4DABH32D1Gr4.Models.Address", "Address")
+                    b.HasOne("E18I4DABH32D1Gr4.Models.Address", "PrimaryAddress")
                         .WithMany()
-                        .HasForeignKey("addressId");
+                        .HasForeignKey("PrimaryAddressaddressId");
                 });
 #pragma warning restore 612, 618
         }
