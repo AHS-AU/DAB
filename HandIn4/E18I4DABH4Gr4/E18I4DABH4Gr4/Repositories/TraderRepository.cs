@@ -44,12 +44,10 @@ namespace E18I4DABH4Gr4.Repositories
 
         public void Update(Trader trader)
         {
-            var updateTrader = traderContext.Traders.Find(trader.Id);
-            if (updateTrader != null)
-            {
-                traderContext.Traders.Update(trader);
-                traderContext.SaveChanges();
-            }
+
+            traderContext.Traders.Update(trader);
+            traderContext.SaveChanges();
+
         }
     }
 }

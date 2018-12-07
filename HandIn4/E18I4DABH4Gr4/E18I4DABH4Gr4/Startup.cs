@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using E18I4DABH4Gr4.Context;
+using E18I4DABH4Gr4.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -43,6 +44,9 @@ namespace E18I4DABH4Gr4
             string mDbName = "TraderDB";
             string mConnString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=" + mDbName + ";Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             services.AddDbContext<TraderContext>(options => options.UseSqlServer(mConnString));
+
+            // Repository Services
+            services.AddTransient(typeof(ITraderRepository), typeof(TraderRepository));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
