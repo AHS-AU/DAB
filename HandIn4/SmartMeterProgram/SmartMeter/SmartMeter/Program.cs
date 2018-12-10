@@ -14,12 +14,13 @@ namespace SmartMeter
         {
             TradersRepoController mTradersRepoController = new TradersRepoController();
 
-            List<Trader> GetAll = mTradersRepoController.GetTradersAsync().Result.ToList();
+            List<Trader> GetAllTraders = mTradersRepoController.GetTradersAsync().Result.ToList();
 
-            foreach(var v in GetAll)
+            foreach(var v in GetAllTraders)
             {
                 Console.WriteLine(v);
             }
+
 
            
         }
