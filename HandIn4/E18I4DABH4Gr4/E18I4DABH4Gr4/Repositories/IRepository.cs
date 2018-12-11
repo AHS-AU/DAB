@@ -7,8 +7,11 @@ namespace E18I4DABH4Gr4.Repositories
 {
     public interface IRepository<TEntity> where TEntity : class
     {
-        Task<TEntity> Get(int id);
+        Task<TEntity> Get(string id);
         IEnumerable<TEntity> GetAll();
+        //IEnumerable<TEntity> GetAllOverProducingProsumers();
+        //IEnumerable<TEntity> GetAllUnderProducingProsumers();
+
 
         Task Add(TEntity entity);
         Task AddRange(IEnumerable<TEntity> entities);

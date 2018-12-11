@@ -46,15 +46,15 @@ namespace E18I4DABH4Gr4.Controllers
             return Ok(prosumer);
         }
         // PUT: api/People/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutProsumer([FromRoute] string id, [FromBody] Prosumer prosumer)
+        [HttpPut("{name}")]
+        public async Task<IActionResult> PutProsumer([FromRoute] string name, [FromBody] Prosumer prosumer)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != prosumer.ProsumerId)
+            if (name != prosumer.Name)
             {
                 return BadRequest();
             }
@@ -73,9 +73,9 @@ namespace E18I4DABH4Gr4.Controllers
                 return BadRequest(ModelState);
             }
 
-            prosumer.ProsumerId = null;
+            //prosumer.ProsumerId = "";
 
-            await repo.Add(prosumer).ConfigureAwait(false);
+            await repo.Add(prosumer); // .ConfigureAwait(false);
 
             return CreatedAtAction("GetProsumer", new { id = prosumer.ProsumerId }, prosumer);
         }

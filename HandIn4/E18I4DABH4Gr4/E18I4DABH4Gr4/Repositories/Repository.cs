@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Documents;
+﻿using E18I4DABH4Gr4.Models;
+using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using System;
 using System.Collections.Generic;
@@ -55,16 +56,19 @@ namespace E18I4DABH4Gr4.Repositories
         {
             Uri uri = GetCollectionURI();
             var document = await client.CreateDocumentAsync(uri, entity);
-            setId(entity, document.Resource.Id);
+
+            string id = document.Resource.Id;
+            setId(entity, id);
+            
         }
 
         async Task IRepository<TEntity>.Set(TEntity entity)
         {
-            await client.ReplaceDocumentAsync(UriFactory.CreateDocumentUri(DatabaseName, CollectionId, getId(entity)), entity);
+            await client.ReplaceDocumentAsync(UriFactory.CreateDocumentUri(DatabaseName, CollectionId, Convert.ToString(getId(entity))), entity);
         }
 
 
-        Task<TEntity> IRepository<TEntity>.Get(int id)
+        Task<TEntity> IRepository<TEntity>.Get(string id)
         {
             throw new NotImplementedException();
         }
@@ -97,15 +101,49 @@ namespace E18I4DABH4Gr4.Repositories
             await Task.WhenAll(tasks);
         }
 
-        //protected string getId(Prosumer entity)
+        //IEnumerable<TEntity> IRepository<TEntity>.GetAll()
         //{
-        //    return entity.ProsumerId;
+        //    return GetQuery().ToList();
         //}
 
-        //protected void setId(Prosumer entity, string id)
+
+        //IEnumerable<TEntity> IRepository<TEntity>.GetAllOverProducingProsumers()
         //{
-        //    entity.ProsumerId = id;
+            
+        //    List<Prosumer> returnList = new List<Prosumer>();
+        //    var queryOptions = new FeedOptions() { MaxItemCount = -1 };
+        //    var allProsumersList = client.CreateDocumentQuery<Prosumer>(GetCollectionURI(), queryOptions);
+
+        //    allProsumersList.Select()
+        //    //IOrderedQueryable<TEntity> query = client.CreateDocumentQuery<TEntity>(GetCollectionURI(), queryOptions);
+        //    foreach (var item in allProsumersList)
+        //    {
+        //        if (item.KWhAmount > 0)
+        //        {
+        //            returnList.Add(item);
+        //        }
+        //    }
+        //    return returnList;
         //}
+
+        //private async Task ProsumerHelper(TEntity entity)
+        //{
+        //    await client.(UriFactory.CreateDocumentUri(DatabaseName, CollectionId, getId(entity)));
+        //}
+
+        //public IList<Prosumer> GetAllUnderProducingProsumers()
+        //{
+        //    List<TEntity> returnList = GetQuery().ToList();
+        //    foreach (var item in returnList)
+        //    {
+        //        if (item.KWhAmount < 0)
+        //        {
+        //            returnList.Add(item);
+        //        }
+        //    }
+        //    return returnList;
+        //}
+
         protected abstract string getId(TEntity entity);
         protected abstract void setId(TEntity entity, string id);
 
