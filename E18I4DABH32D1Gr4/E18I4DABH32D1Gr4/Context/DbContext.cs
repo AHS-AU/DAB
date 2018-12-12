@@ -8,36 +8,37 @@ using Microsoft.EntityFrameworkCore;
 
 namespace E18I4DABH32D1Gr4.Context
 {
-    class DBContext : DbContext
+    public class DBContext : DbContext
     {
-
-        public void DbContext(){
-
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            string cn = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Personkartotek;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-            optionsBuilder.UseSqlServer(cn);
-
-            base.OnConfiguring(optionsBuilder);
-        }
-
-        //protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        // Default Constructor
+        //public void DbContext()
         //{
-        //    modelBuilder.Entity<Person>()
-        //        .Property(u => u.fullName)
-        //        .HasColumnName("display_name");
+
         //}
 
+        // Base Constructor
+        public DBContext(DbContextOptions<DBContext> options)
+            : base(options)
+        {
+        }
 
-        public DbSet<Person> persons { get; set; }
+        // On Config
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    string cn = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Personkartotek;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+        //    optionsBuilder.UseSqlServer(cn);
+            
+        //    base.OnConfiguring(optionsBuilder);
+        //}
 
-        public DbSet<Address> address { get; set; }
+        // Variables
+        public virtual DbSet<Person> people { get; set; }
 
-        public DbSet<City> city { get; set; }
+        public virtual DbSet<Address> address { get; set; }
 
-        public DbSet<Email> emailAddress { get; set; }
+        public virtual DbSet<City> city { get; set; }
+
+        public virtual DbSet<Email> emailAddress { get; set; }
     }
 }
 
