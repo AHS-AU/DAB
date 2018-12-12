@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,10 +13,14 @@ namespace E18I4DABH4Gr4.Models
         {
             Private, Company
         }
-        private string ProsumerId { get; }
 
+        [JsonProperty(PropertyName = "id")]
+        public string ProsumerId { get; set; }
+
+        [Required]
         public string Name { get; set; }
 
+        [Required]
         public ProsumerType prosumerType { get; set; }
 
         public int KWhAmount { get; set; }
