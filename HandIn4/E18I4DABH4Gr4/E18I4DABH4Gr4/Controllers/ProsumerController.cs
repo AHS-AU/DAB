@@ -45,6 +45,32 @@ namespace E18I4DABH4Gr4.Controllers
 
             return Ok(prosumer);
         }
+
+        // GETOVERPRODUCING: api/Prosumer/5
+        [HttpGet("OverProducing")]
+        public IActionResult GetOverProducingProsumer()
+        {
+
+            var prosumers = repo.GetAllOverProducingProsumers();
+
+            if (prosumers.Any() == false)
+                return NotFound();
+
+            return Ok(prosumers);
+        }
+
+        // GETUNDERPRODUCING: api/Prosumer/5
+        [HttpGet("UnderProducing")]
+        public IActionResult GetUnderProducingProsumer()
+        {
+
+            var prosumers = repo.GetAllUnderProducingProsumers();
+
+            if (prosumers.Any() == false)
+                return NotFound();
+
+            return Ok(prosumers);
+        }
         // PUT: api/People/5
         [HttpPut("{name}")]
         public async Task<IActionResult> PutProsumer([FromRoute] string name, [FromBody] Prosumer prosumer)

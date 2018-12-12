@@ -101,49 +101,6 @@ namespace E18I4DABH4Gr4.Repositories
             await Task.WhenAll(tasks);
         }
 
-        //IEnumerable<TEntity> IRepository<TEntity>.GetAll()
-        //{
-        //    return GetQuery().ToList();
-        //}
-
-
-        //IEnumerable<TEntity> IRepository<TEntity>.GetAllOverProducingProsumers()
-        //{
-            
-        //    List<Prosumer> returnList = new List<Prosumer>();
-        //    var queryOptions = new FeedOptions() { MaxItemCount = -1 };
-        //    var allProsumersList = client.CreateDocumentQuery<Prosumer>(GetCollectionURI(), queryOptions);
-
-        //    allProsumersList.Select()
-        //    //IOrderedQueryable<TEntity> query = client.CreateDocumentQuery<TEntity>(GetCollectionURI(), queryOptions);
-        //    foreach (var item in allProsumersList)
-        //    {
-        //        if (item.KWhAmount > 0)
-        //        {
-        //            returnList.Add(item);
-        //        }
-        //    }
-        //    return returnList;
-        //}
-
-        //private async Task ProsumerHelper(TEntity entity)
-        //{
-        //    await client.(UriFactory.CreateDocumentUri(DatabaseName, CollectionId, getId(entity)));
-        //}
-
-        //public IList<Prosumer> GetAllUnderProducingProsumers()
-        //{
-        //    List<TEntity> returnList = GetQuery().ToList();
-        //    foreach (var item in returnList)
-        //    {
-        //        if (item.KWhAmount < 0)
-        //        {
-        //            returnList.Add(item);
-        //        }
-        //    }
-        //    return returnList;
-        //}
-
         protected abstract string getId(TEntity entity);
         protected abstract void setId(TEntity entity, string id);
 

@@ -27,5 +27,15 @@ namespace E18I4DABH4Gr4.Repositories
         {
             entity.ProsumerId = id;
         }
+
+        public IEnumerable<Prosumer> GetAllOverProducingProsumers()
+        {
+            return GetQuery().Where(x => x.KWhAmount > 0).ToList();
+        }
+
+        public IEnumerable<Prosumer> GetAllUnderProducingProsumers()
+        {
+            return GetQuery().Where(x => x.KWhAmount < 0).ToList();
+        }
     }
 }
