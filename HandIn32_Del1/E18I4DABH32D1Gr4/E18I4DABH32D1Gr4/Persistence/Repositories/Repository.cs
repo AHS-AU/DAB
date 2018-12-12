@@ -7,6 +7,7 @@ using E18I4DABH32D1Gr4.Contexts;
 using E18I4DABH32D1Gr4.Core.IRepositories;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace E18I4DABH32D1Gr4.Persistence.Repositories
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
