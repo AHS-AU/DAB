@@ -7,7 +7,7 @@ using System.Text;
 
 namespace E18I4DABH32D1Gr4.Models
 {
-    [Table("Address")]
+    //[Table("Address")]
     public class Address
     {
         [Key]//, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
