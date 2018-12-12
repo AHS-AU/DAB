@@ -73,8 +73,8 @@ namespace E18I4DABH4Gr4
             // specifying the Swagger JSON endpoint.
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
             app.UseSwaggerUI(c =>
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "HandIn4 API V1");
             {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "HandIn4 API V1");
             });
 
             app.UseStaticFiles();
