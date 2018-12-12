@@ -7,7 +7,7 @@ using System.Text;
 
 namespace E18I4DABH32D1Gr4.Models
 {
-    [Table("Email")]
+    //[Table("Email")]
     public class Email
     {
         [Key]//, Index(IsUnique = true)]

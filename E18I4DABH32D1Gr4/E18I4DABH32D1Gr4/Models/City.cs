@@ -7,7 +7,7 @@ using System.Text;
 
 namespace E18I4DABH32D1Gr4.Models
 {
-    [Table("City")]
+    //[Table("City")]
     public class City
     {
         [Key]//, Index(IsUnique = true)]
