@@ -12,6 +12,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.EntityFrameworkCore;
+using E18I4DABH4Gr4.Models;
+using E18I4DABH4Gr4.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace E18I4DABH4Gr4
 {
@@ -39,6 +44,7 @@ namespace E18I4DABH4Gr4
             {
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
             });
+            services.AddTransient(typeof(SmartGridRepository));
 
             // Create Database TraderDb
             string mDbName = "TraderDB";
@@ -86,6 +92,13 @@ namespace E18I4DABH4Gr4
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
+            app.UseMvc();
         }
     }
 }
