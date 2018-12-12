@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
-namespace E18I4DABH4Gr4.Models
+namespace SmartMeter.Models
 {
     public class Trader
     {
-        [Key]
         public int Id { get; set; }
 
         public string ProducerId { get; set; }
@@ -18,5 +17,11 @@ namespace E18I4DABH4Gr4.Models
         public string KWhTransferred { get; set; }
 
         public DateTime TransferDate { get; set; }
+
+        // Make the Model Serializable
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
     }
 }

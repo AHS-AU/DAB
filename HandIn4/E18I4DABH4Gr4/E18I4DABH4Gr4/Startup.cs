@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using E18I4DABH4Gr4.Context;
+using E18I4DABH4Gr4.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
@@ -37,6 +40,14 @@ namespace E18I4DABH4Gr4
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
             });
 
+            // Create Database TraderDb
+            string mDbName = "TraderDB";
+            string mConnString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=" + mDbName + ";Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            services.AddDbContext<TraderContext>(options => options.UseSqlServer(mConnString));
+
+            // Repository Services
+            services.AddTransient(typeof(ITraderRepository), typeof(TraderRepository));
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             //var connection = @"Server=(localdb)\mssqllocaldb;Database=Personkartotek;Trusted_Connection=True;ConnectRetryCount=0";
@@ -59,11 +70,11 @@ namespace E18I4DABH4Gr4
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
             // specifying the Swagger JSON endpoint.
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
             app.UseSwaggerUI(c =>
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "HandIn4 API V1");
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
 
             app.UseStaticFiles();
