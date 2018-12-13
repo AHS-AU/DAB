@@ -13,13 +13,32 @@ namespace HandIn4_Simulation
         static void Main(string[] args)
         {
             TradersRepoController mTradersRepoController = new TradersRepoController();
+            ProsumerController mProsumerController = new ProsumerController();
+            SmartGridsController mSmartGridsController = new SmartGridsController();
 
-            List<Trader> GetAllTraders = mTradersRepoController.GetTradersAsync().Result.ToList();
+            //List<Trader> GetAllTraders = mTradersRepoController.GetAllTradersAsync().Result.ToList();
+            //foreach (var v in GetAllTraders)
+            //{
+            //    Console.WriteLine(v);
+            //}
+            //Trader mTrader = mTradersRepoController.GetTraderAsync(1).Result;
+            //Console.WriteLine(mTrader);
 
-            foreach (var v in GetAllTraders)
-            {
-                Console.WriteLine(v);
-            }
+
+            //List<Prosumer> GetAllProsumers = mProsumerController.GetAllProsumersAsync().Result.ToList();
+            //foreach(var v in GetAllProsumers)
+            //{
+            //    Console.WriteLine(v);
+            //}
+           
+
+            //List<SmartGrid> GetAllSmartGrids = mSmartGridsController.GetAllSmartGridsAsync().Result.ToList();
+            //foreach(var v in GetAllSmartGrids)
+            //{
+            //    Console.WriteLine(v);
+            //}
+            //SmartGrid mSmartGrid = mSmartGridsController.GetSmartGridAsync(1).Result;
+            //Console.WriteLine(mSmartGrid);
 
 
         }

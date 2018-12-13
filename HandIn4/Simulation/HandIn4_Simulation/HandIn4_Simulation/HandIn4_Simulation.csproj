@@ -46,7 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\ProsumerController.cs" />
+    <Compile Include="Controllers\SmartGridsController.cs" />
     <Compile Include="Controllers\TradersRepoController.cs" />
+    <Compile Include="Models\Prosumer.cs" />
+    <Compile Include="Models\SmartGrid.cs" />
     <Compile Include="Models\Trader.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

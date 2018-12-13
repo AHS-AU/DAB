@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace E18I4DABH4Gr4.Migrations
 {
-    public partial class Initial_create : Migration
+    public partial class AddSmartggriddb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -10,7 +11,8 @@ namespace E18I4DABH4Gr4.Migrations
                 name: "SmartGrids",
                 columns: table => new
                 {
-                    SmartGridId = table.Column<string>(maxLength: 40, nullable: false)
+                    SmartGridId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn)
                 },
                 constraints: table =>
                 {
@@ -18,48 +20,48 @@ namespace E18I4DABH4Gr4.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Prosumers",
+                name: "Prosumer",
                 columns: table => new
                 {
-                    ProsumerId = table.Column<string>(maxLength: 40, nullable: false),
+                    ProsumerId = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                     prosumerType = table.Column<int>(nullable: false),
                     KWhAmount = table.Column<int>(nullable: false),
-                    ConsumerFK = table.Column<string>(nullable: true),
-                    ProducerFK = table.Column<string>(nullable: true)
+                    SmartGridId = table.Column<int>(nullable: true),
+                    SmartGridId1 = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Prosumers", x => x.ProsumerId);
+                    table.PrimaryKey("PK_Prosumer", x => x.ProsumerId);
                     table.ForeignKey(
-                        name: "FK_Prosumers_SmartGrids_ConsumerFK",
-                        column: x => x.ConsumerFK,
+                        name: "FK_Prosumer_SmartGrids_SmartGridId",
+                        column: x => x.SmartGridId,
                         principalTable: "SmartGrids",
                         principalColumn: "SmartGridId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Prosumers_SmartGrids_ProducerFK",
-                        column: x => x.ProducerFK,
+                        name: "FK_Prosumer_SmartGrids_SmartGridId1",
+                        column: x => x.SmartGridId1,
                         principalTable: "SmartGrids",
                         principalColumn: "SmartGridId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Prosumers_ConsumerFK",
-                table: "Prosumers",
-                column: "ConsumerFK");
+                name: "IX_Prosumer_SmartGridId",
+                table: "Prosumer",
+                column: "SmartGridId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Prosumers_ProducerFK",
-                table: "Prosumers",
-                column: "ProducerFK");
+                name: "IX_Prosumer_SmartGridId1",
+                table: "Prosumer",
+                column: "SmartGridId1");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Prosumers");
+                name: "Prosumer");
 
             migrationBuilder.DropTable(
                 name: "SmartGrids");

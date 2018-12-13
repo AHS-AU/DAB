@@ -5,32 +5,32 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using HandIn4_Simulation.Models;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace HandIn4_Simulation.Controllers
 {
     public class TradersRepoController
     {
         static string mApiUrl = "http://localhost:50955/api/TradersRepo";
+
         static HttpClient mHttpClient = new HttpClient();
 
         // GET: api/TradersRepo
-        public async Task<List<Trader>> GetTradersAsync()
+        public async Task<List<Trader>> GetAllTradersAsync()
         {
             string responseBody = await mHttpClient.GetStringAsync(new Uri(mApiUrl));
             return JsonConvert.DeserializeObject<List<Trader>>(responseBody);
         }
 
         //// GET: api/TradersRepo/5
-        //public Trader GetTrader(int id)
-        //{
-        //    return _context.GetById(id);
-        //}
+        public async Task<Trader> GetTraderAsync(int id)
+        {
+            string responseBody = await mHttpClient.GetStringAsync(new Uri(mApiUrl + "/" + id.ToString()));
+            return JsonConvert.DeserializeObject<Trader>(responseBody);
+        }
 
         //// PUT: api/TradersRepo/5
-        //public void PutTrader(int id, Trader trader)
-        //{
-        //    _context.Update(trader);
-        //}
+
 
         //// POST: api/TradersRepo
         //public void PostTrader(Trader trader)
