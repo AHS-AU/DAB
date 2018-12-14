@@ -48,15 +48,17 @@ namespace E18I4DABH4Gr4
             services.AddTransient(typeof(SmartGridRepository));
 
             // Create Database TraderDb
-            string mDbName = "TraderDB";
-            string mConnString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=" + mDbName + ";Integrated Security=True;" +
-                "Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            //string mDbName = "TraderDB";
+            //string mConnString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=" + mDbName + ";Integrated Security=True;" +
+            //    "Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            string mConnString = "Data Source=st-i4dab.uni.au.dk;User ID=E18I4DABH4Gr4;Password=E18I4DABH4Gr4;Connect Timeout=60;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             services.AddDbContext<TraderContext>(options => options.UseSqlServer(mConnString));
 
             // Create Database SmartGridDB
-            string mDbName2 = "SmartGridDB";
-            string mConnString2 = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=" + mDbName2 + ";Integrated Security=True;" +
-                "Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            //string mDbName2 = "SmartGridDB";
+            //string mConnString2 = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=" + mDbName2 + ";Integrated Security=True;" +
+            //    "Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            string mConnString2 = "Data Source=st-i4dab.uni.au.dk;User ID=E18I4DABH4Gr4;Password=E18I4DABH4Gr4;Connect Timeout=60;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             services.AddDbContext<SmartGridDBContext>(options => options.UseSqlServer(mConnString2));
 
             // Repository Services

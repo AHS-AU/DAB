@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace E18I4DABH4Gr4.Migrations
 {
-    public partial class This_will_Be_The_last_try : Migration
+    public partial class newSmartGrid : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
