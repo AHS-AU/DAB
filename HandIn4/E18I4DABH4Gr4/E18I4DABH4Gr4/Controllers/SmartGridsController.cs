@@ -14,9 +14,9 @@ namespace E18I4DABH4Gr4.Controllers
     [ApiController]
     public class SmartGridsController : ControllerBase
     {
-        private readonly SmartGridRepository _repo;
+        private readonly ISmartGridRepository _repo;
 
-        public SmartGridsController(SmartGridRepository context)
+        public SmartGridsController(ISmartGridRepository context)
         {
             _repo = context;
         }
