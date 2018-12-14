@@ -14,9 +14,9 @@ namespace E18I4DABH4Gr4.Repositories
         {
 
         }
-        public Prosumer GetProsumer(string name)
+        public Prosumer GetProsumer(string id)
         {
-            return GetQuery().Where(x => x.Name.ToLower() == name.ToLower()).ToList().FirstOrDefault();
+            return GetQuery().Where(x => x.ProsumerId == id).ToList().FirstOrDefault();
         }
         protected override string getId(Prosumer entity)
         {
