@@ -18,6 +18,8 @@ namespace E18I4DABH4Gr4.Repositories
         public Repository(string databaseName, string collectionId)
         {
             client = new DocumentClient(
+                // new Uri("https://localhost:8081"),
+                //"C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==");
                 new Uri("https://e18i4dab.documents.azure.com:443"),
                 "kM87VaX0sSG87AFM2x6LgtUoZ80N6YRumqvnc5TUhyOrH6yoiPHGFpjAEhYeQL1PhRCkN2nKzpNEBifo3mVthw==");
             DatabaseName = databaseName;

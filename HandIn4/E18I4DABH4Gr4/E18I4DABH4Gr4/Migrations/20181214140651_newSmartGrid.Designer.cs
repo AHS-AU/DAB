@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace E18I4DABH4Gr4.Migrations
 {
     [DbContext(typeof(SmartGridDBContext))]
-    [Migration("20181214125430_This_will_Be_The_last_try")]
-    partial class This_will_Be_The_last_try
+    [Migration("20181214140651_newSmartGrid")]
+    partial class newSmartGrid
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
+                .HasAnnotation("ProductVersion", "2.1.3-rtm-32065")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
