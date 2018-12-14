@@ -13,11 +13,21 @@ namespace E18I4DABH4Gr4.Models
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.Entity<Prosumer>().HasOne(p => p.ProsumerId).WithMany(p => p);
-            //modelBuilder.Entity<SmartGrid>().HasAlternateKey(p => p.Consumers);
+            modelBuilder.Entity<SmartGrid>().Property<int>("ProducerForeignKey");
+            modelBuilder.Entity<SmartGrid>().Property<int>("ConsumerForeignKey");
+
+            modelBuilder.Entity<SmartGrid>().HasKey(s => s.SmartGridId);
+
+            modelBuilder.Entity<SmartGrid>().HasMany(p => p.Consumers)
+                .WithOne()
+                .HasForeignKey("ConsumerForeignKey");
+            modelBuilder.Entity<SmartGrid>().HasMany(p => p.Producers)
+                .WithOne()
+                .HasForeignKey("ProducerForeignKey");
+           
         }
 
         public DbSet<SmartGrid> SmartGrids { get; set; }
-        //public DbSet<Prosumer> Prosumers { get; set; }
+        public DbSet<Prosumer> Prosumers { get; set; }
     }
 }
