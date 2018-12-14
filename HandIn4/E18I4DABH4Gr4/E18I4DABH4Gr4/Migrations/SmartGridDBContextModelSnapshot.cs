@@ -33,8 +33,6 @@ namespace E18I4DABH4Gr4.Migrations
 
                     b.Property<int?>("ProducerForeignKey");
 
-                    b.Property<int?>("SmartGridId1");
-
                     b.Property<int>("prosumerType");
 
                     b.HasKey("ProsumerId");
@@ -43,7 +41,7 @@ namespace E18I4DABH4Gr4.Migrations
 
                     b.HasIndex("ProducerForeignKey");
 
-                    b.ToTable("Prosumer");
+                    b.ToTable("Prosumers");
                 });
 
             modelBuilder.Entity("E18I4DABH4Gr4.Models.SmartGrid", b =>

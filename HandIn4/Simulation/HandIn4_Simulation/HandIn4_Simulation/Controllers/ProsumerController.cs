@@ -43,36 +43,17 @@ namespace HandIn4_Simulation.Controllers
             }
         }
 
-        //// GETUNDERPRODUCING: api/Prosumer/5
-        //[HttpGet("UnderProducing")]
-        //public IActionResult GetUnderProducingProsumer()
-        //{
-
-        //    var prosumers = repo.GetAllUnderProducingProsumers();
-
-        //    if (prosumers.Any() == false)
-        //        return NotFound();
-
-        //    return Ok(prosumers);
-        //}
         //// PUT: api/People/5
-        //[HttpPut("{name}")]
-        //public async Task<IActionResult> PutProsumer([FromRoute] string name, [FromBody] Prosumer prosumer)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
+        public async Task<HttpResponseMessage> Put(string id, Prosumer prosumer)
+        {
+            var content = JsonConvert.SerializeObject(prosumer);
+            var buf = System.Text.Encoding.UTF8.GetBytes(content);
+            var byteArrayContent = new ByteArrayContent(buf);
+            byteArrayContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-        //    if (name != prosumer.Name)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    await repo.Set(prosumer);
-
-        //    return NoContent();
-        //}
+            var responseBody = await mHttpClient.PutAsync(new Uri(mApiUrl + "/" + id), byteArrayContent);
+            return responseBody;
+        }
 
         // POST: api/Prosumer
         public async Task<HttpResponseMessage> Post(Prosumer prosumer)

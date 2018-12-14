@@ -44,6 +44,13 @@ namespace HandIn4_Simulation.Controllers
             return responseBody;
         }
 
+        //// DELETE: api/TradersRepo/5
+        public async Task<HttpResponseMessage> Delete(int id)
+        {
+            var responseBody = await mHttpClient.DeleteAsync(new Uri(mApiUrl + "/" + id));
+            return responseBody;
+        }
+
         //private bool TraderExists(int id)
         //{
         //    var Trader = _context.GetById(id);

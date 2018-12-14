@@ -20,14 +20,14 @@ namespace HandIn4_Simulation
             // Clear SmartGrid
             ClearSmartGrid(mSmartGridsController);
 
+            // Clear Trades
+            ClearTraders(mTradersRepoController);
+
             /// Clear Prosumers
-            /// Only use this if you want to clear, otherwise comment it out.
-            //ClearProsumers(mProsumerController);
+            ClearProsumers(mProsumerController);
 
             /// Populate Prosumers
-            /// Only run this function the first time to populate the DB
-            /// Comment it out if running program multiple times
-            //PopulateProsumers(mProsumerController);
+            PopulateProsumers(mProsumerController);
 
             // Find Producer and Consumer
             List<Prosumer> mProducerList = mProsumerController.GetProsumerWithProduction("Overproducing").Result.ToList();
@@ -46,57 +46,112 @@ namespace HandIn4_Simulation
             var mProducers = AllSmartGrid.Producers;
             var mConsumers = AllSmartGrid.Consumers;
 
-            Console.WriteLine("Count Producers = " + mProducers);
-            Console.WriteLine("Count Consumers = " + mConsumers);
-
-
-
-
-
-
-
-
-            //List<Trader> GetAllTraders = mTradersRepoController.GetAllTradersAsync().Result.ToList();
-            //foreach (var v in GetAllTraders)
-            //{
-            //    Console.WriteLine(v);
-            //}
-            //Trader mTrader = mTradersRepoController.GetTraderAsync(1).Result;
-            //Console.WriteLine(mTrader);
-
-
-            //List<Prosumer> GetAllProsumers = mProsumerController.GetAllProsumersAsync().Result.ToList();
-            //foreach (var v in GetAllProsumers)
-            //{
-            //    Console.WriteLine(v);
-            //}
-            //Prosumer mProsumer = mProsumerController.GetProsumerAsync("2").Result;
-            //Console.WriteLine(mProsumer);
-
-            //// Underproducing
-            //List<Prosumer> mProsumerList = mProsumerController.GetProsumerWithProduction("Underproducing").Result.ToList();
-            //foreach (var v in mProsumerList)
-            //{
-            //    Console.WriteLine(v);
-            //}
-            //Console.WriteLine("\n");
-
-            //// Overproducing
-            //mProsumerList = mProsumerController.GetProsumerWithProduction("Overproducing").Result.ToList();
-            //foreach (var v in mProsumerList)
-            //{
-            //    Console.WriteLine(v);
-            //}
-
-
-            List<SmartGrid> GetAllSmartGrids = mSmartGridsController.GetAllSmartGridsAsync().Result.ToList();
-            foreach (var v in GetAllSmartGrids)
+            // Calculate Producers- and Consumers kWhAmount
+            var ProducersAmount = 0;
+            var ConsumersAmount = 0;
+            foreach(var v in mProducers)
             {
-                Console.WriteLine(v);
+                ProducersAmount += v.KWhAmount;
             }
-            //SmartGrid mSmartGrid = mSmartGridsController.GetSmartGridAsync(1).Result;
-            //Console.WriteLine(mSmartGrid);
+            foreach (var v in mConsumers)
+            {
+                ConsumersAmount += v.KWhAmount;
+            }
+            var difference = Math.Abs(ProducersAmount) - Math.Abs(ConsumersAmount);
 
+            Console.WriteLine("\nDifference: " + difference);
+            Console.WriteLine("Producers Amount: " + Math.Abs(ProducersAmount));
+            Console.WriteLine("Consumers Amount: " + Math.Abs(ConsumersAmount));
+
+            // Let's Trade
+            int loopCounter = 0;
+            foreach (var consumer in mConsumers)
+            {
+                loopCounter++;
+                Console.WriteLine("\n******************** Consumer " + loopCounter + " *******************\n");
+                foreach (var producer in mProducers)
+                {
+                    if (consumer.KWhAmount == 0) continue;
+                    if (producer.KWhAmount == 0) continue;
+
+                    //Console.WriteLine(">> " + producer.Name + " is selling " + Math.Abs(producer.KWhAmount) + " kWh");
+                    //Console.WriteLine(">> " + consumer.Name + " is buying " + Math.Abs(consumer.KWhAmount) + " kWh\n");
+                    if(Math.Abs(consumer.KWhAmount) < producer.KWhAmount)
+                    {
+                        producer.KWhAmount += consumer.KWhAmount;
+                        Console.WriteLine(">>>> TRADE: " + consumer.Name + " has bought " + Math.Abs(consumer.KWhAmount) + " kWh from " + producer.Name);
+                        Trader trader = new Trader()
+                        {
+                            ProducerId = producer.ProsumerId.ToString(),
+                            ConsumerId = consumer.ProsumerId.ToString(),
+                            KWhTransferred = Math.Abs(consumer.KWhAmount).ToString(),
+                            TransferDate = DateTime.Now
+                        };
+                        mTradersRepoController.Post(trader).Wait();
+                        consumer.KWhAmount = 0;
+                        mProsumerController.Put(producer.ProsumerId, producer).Wait();
+                        mProsumerController.Put(consumer.ProsumerId, consumer).Wait();
+                    }
+                    else if(Math.Abs(consumer.KWhAmount) > producer.KWhAmount)
+                    {
+                        consumer.KWhAmount += producer.KWhAmount;
+                        Console.WriteLine(">>>> TRADE: " + consumer.Name + " has bought " + Math.Abs(producer.KWhAmount) + " kWh from " + producer.Name);
+                        Trader trader = new Trader()
+                        {
+                            ProducerId = producer.ProsumerId.ToString(),
+                            ConsumerId = consumer.ProsumerId.ToString(),
+                            KWhTransferred = producer.KWhAmount.ToString(),
+                            TransferDate = DateTime.Now
+                        };
+                        mTradersRepoController.Post(trader).Wait();
+                        producer.KWhAmount = 0;
+                        mProsumerController.Put(producer.ProsumerId, producer).Wait();
+                        mProsumerController.Put(consumer.ProsumerId, consumer).Wait();
+                    }
+                    Console.WriteLine(producer.Name + " is selling " + producer.KWhAmount + " and " +
+                        consumer.Name + " is buying " + Math.Abs(consumer.KWhAmount));
+                }
+                if (consumer.KWhAmount != 0)
+                {
+                    Console.WriteLine("Buyer is missing " + Math.Abs(consumer.KWhAmount) +
+                        ", but he somehow manages to get free kWh from the powerplant (happy ending)");
+                    consumer.KWhAmount = 0;
+                }
+            }
+
+            // Remove Consumers and Producers if their kWhAmount equals 0.
+            foreach (var producer in mProducers.ToList())
+            {
+                if(producer.KWhAmount == 0)
+                {
+                    mProducers.Remove(producer);
+                }
+            }
+            foreach (var consumer in mConsumers.ToList())
+            {
+                if(consumer.KWhAmount == 0)
+                {
+                    mConsumers.Remove(consumer);
+                }
+            }
+
+            // Post the SmartGrid
+            mSmartGrid.Producers = mProducers;
+            mSmartGrid.Consumers = mConsumers;
+            mSmartGridsController.Post(mSmartGrid).Wait();
+
+            // Check difference now and how much involved powerplant was as buy/sell
+            if(difference > 0)
+            {
+                Console.WriteLine("\nSold " + difference + " kWh to powerplant");
+            }
+            else
+            {
+                Console.WriteLine("\nBought " + Math.Abs(difference) + " kWh from powerplant");
+            }
+
+            Console.WriteLine("\n\n");
+            Console.ReadLine();
 
         }
 
@@ -161,6 +216,18 @@ namespace HandIn4_Simulation
                 counter++;
                 smartGridsController.Delete(v.SmartGridId).Wait();
                 Console.WriteLine("Deleted " + counter + "/" + GetAllSmartGrid.Count + " SmartGrid with id = " + v.SmartGridId);
+            }
+        }
+
+        private static void ClearTraders(TradersRepoController tradersRepoController)
+        {
+            List<Trader> GetAllTraders = tradersRepoController.GetAllTradersAsync().Result.ToList();
+            int counter = 0;
+            foreach(var v in GetAllTraders)
+            {
+                counter++;
+                tradersRepoController.Delete(v.Id).Wait();
+                Console.WriteLine("Deleted " + counter + "/" + GetAllTraders.Count + " Trader with id = " + v.Id);
             }
         }
 
