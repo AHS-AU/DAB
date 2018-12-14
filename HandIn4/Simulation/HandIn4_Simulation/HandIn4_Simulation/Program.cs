@@ -160,7 +160,7 @@ namespace HandIn4_Simulation
             {
                 counter++;
                 smartGridsController.Delete(v.SmartGridId).Wait();
-                Console.WriteLine("Deleted " + counter + "/" + GetAllSmartGrid.Count + " Prosumer with id = " + v.SmartGridId);
+                Console.WriteLine("Deleted " + counter + "/" + GetAllSmartGrid.Count + " SmartGrid with id = " + v.SmartGridId);
             }
         }
 
