@@ -45,7 +45,7 @@ namespace E18I4DABH4Gr4
             {
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
             });
-            services.AddTransient(typeof(SmartGridRepository));
+            //services.AddTransient(typeof(SmartGridRepository));
 
             // Create Database TraderDb
             //string mDbName = "TraderDB";
@@ -63,7 +63,7 @@ namespace E18I4DABH4Gr4
 
             // Repository Services
             services.AddTransient(typeof(ITraderRepository), typeof(TraderRepository));
-            //services.AddTransient(typeof(ISmartGridRepository), typeof(SmartGridRepository));
+            services.AddTransient(typeof(ISmartGridRepository), typeof(SmartGridRepository));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 

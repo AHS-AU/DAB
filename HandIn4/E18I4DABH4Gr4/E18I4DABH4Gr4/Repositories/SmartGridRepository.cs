@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace E18I4DABH4Gr4.Repositories
 {
-    public class SmartGridRepository
+    public class SmartGridRepository : ISmartGridRepository
     {
         private readonly SmartGridDBContext context;
 
