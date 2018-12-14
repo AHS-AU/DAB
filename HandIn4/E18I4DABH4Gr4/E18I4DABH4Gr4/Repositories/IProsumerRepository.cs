@@ -8,7 +8,7 @@ namespace E18I4DABH4Gr4.Repositories
 {
     public interface IProsumerRepository : IRepository<Prosumer>
     {
-        Prosumer GetProsumer(string name);
+        Prosumer GetProsumer(string id);
 
         IEnumerable<Prosumer> GetAllOverProducingProsumers();
         IEnumerable<Prosumer> GetAllUnderProducingProsumers();

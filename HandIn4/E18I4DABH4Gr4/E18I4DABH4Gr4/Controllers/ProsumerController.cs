@@ -27,7 +27,7 @@ namespace E18I4DABH4Gr4.Controllers
             return repo.GetAll();
         }
 
-        // GET: api/People/5
+        // GET: api/Prosumer/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProsumer([FromRoute] string id)
         {
@@ -71,26 +71,32 @@ namespace E18I4DABH4Gr4.Controllers
 
             return Ok(prosumers);
         }
-        // PUT: api/People/5
-        [HttpPut("{name}")]
-        public async Task<IActionResult> PutProsumer([FromRoute] string name, [FromBody] Prosumer prosumer)
+        // PUT: api/Prosumer/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutProsumer([FromRoute] string id, [FromBody] Prosumer prosumer)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (name != prosumer.Name)
-            {
-                return BadRequest();
-            }
+            Prosumer mProsumer = repo.GetProsumer(id);
 
-            await repo.Set(prosumer);
+            mProsumer.Name = prosumer.Name;
+            mProsumer.KWhAmount = prosumer.KWhAmount;
+            mProsumer.prosumerType = prosumer.prosumerType;
+
+            //if (id != prosumer.ProsumerId)
+            //{
+            //    return BadRequest();
+            //}
+
+            await repo.Set(mProsumer);
 
             return NoContent();
         }
 
-        // POST: api/People
+        // POST: api/Prosumer
         [HttpPost]
         public async Task<IActionResult> PostProsumer([FromBody] Prosumer prosumer)
         {
@@ -99,23 +105,23 @@ namespace E18I4DABH4Gr4.Controllers
                 return BadRequest(ModelState);
             }
 
-            //prosumer.ProsumerId = "";
+            prosumer.ProsumerId = "";
 
-            await repo.Add(prosumer); // .ConfigureAwait(false);
+            await repo.Add(prosumer).ConfigureAwait(false);
 
             return CreatedAtAction("GetProsumer", new { id = prosumer.ProsumerId }, prosumer);
         }
 
-        // DELETE: api/People/5
-        [HttpDelete("{name}")]
-        public async Task<IActionResult> DeleteProsumer([FromRoute] string name)
+        // DELETE: api/Prosumer/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteProsumer([FromRoute] string id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            Prosumer prosumer = repo.GetProsumer(name);
+            Prosumer prosumer = repo.GetProsumer(id);
 
             if (prosumer == null)
             {
