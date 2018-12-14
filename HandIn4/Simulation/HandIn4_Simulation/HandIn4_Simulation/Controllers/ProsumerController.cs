@@ -23,36 +23,25 @@ namespace HandIn4_Simulation.Controllers
         }
 
         //// GET: api/Prosumer/5
-        //[HttpGet("{id}")]
-        //public async Task<IActionResult> GetProsumer([FromRoute] string id)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
+        public async Task<Prosumer> GetProsumerAsync(string id)
+        {
+            string responseBody = await mHttpClient.GetStringAsync(new Uri(mApiUrl + "/" + id));
+            return JsonConvert.DeserializeObject<Prosumer>(responseBody);
+        }
 
-        //    Prosumer prosumer = repo.GetProsumer(id);
-
-        //    if (prosumer == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return Ok(prosumer);
-        //}
-
-        //// GETOVERPRODUCING: api/Prosumer/5
-        //[HttpGet("OverProducing")]
-        //public IActionResult GetOverProducingProsumer()
-        //{
-
-        //    var prosumers = repo.GetAllOverProducingProsumers();
-
-        //    if (prosumers.Any() == false)
-        //        return NotFound();
-
-        //    return Ok(prosumers);
-        //}
+        //// GET UNDER/OVERPRODUCING: api/Prosumer/5
+        public async Task<List<Prosumer>> GetProsumerWithProduction(string producing)
+        {
+            if(producing == "Overproducing" || producing == "Underproducing")
+            {
+                string responseBody = await mHttpClient.GetStringAsync(new Uri(mApiUrl + "/" + producing));
+                return JsonConvert.DeserializeObject<List<Prosumer>>(responseBody);
+            }
+            else
+            {
+                return null;
+            }
+        }
 
         //// GETUNDERPRODUCING: api/Prosumer/5
         //[HttpGet("UnderProducing")]
@@ -85,23 +74,24 @@ namespace HandIn4_Simulation.Controllers
         //    return NoContent();
         //}
 
-        //// POST: api/People
-        //[HttpPost]
-        //public async Task<IActionResult> PostProsumer([FromBody] Prosumer prosumer)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
+        // POST: api/Prosumer
+        public async Task<HttpResponseMessage> Post(Prosumer prosumer)
+        {
+            var content = JsonConvert.SerializeObject(prosumer);
+            var buf = System.Text.Encoding.UTF8.GetBytes(content);
+            var byteArrayContent = new ByteArrayContent(buf);
+            byteArrayContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-        //    //prosumer.ProsumerId = "";
-
-        //    await repo.Add(prosumer); // .ConfigureAwait(false);
-
-        //    return CreatedAtAction("GetProsumer", new { id = prosumer.ProsumerId }, prosumer);
-        //}
+            var responseBody = await mHttpClient.PostAsync(new Uri(mApiUrl), byteArrayContent);
+            return responseBody;
+        }
 
         //// DELETE: api/People/5
+        public async Task<HttpResponseMessage> Delete(string id)
+        {
+            var responseBody = await mHttpClient.DeleteAsync(new Uri(mApiUrl + "/" + id));
+            return responseBody;
+        }
         //[HttpDelete("{name}")]
         //public async Task<IActionResult> DeleteProsumer([FromRoute] string name)
         //{

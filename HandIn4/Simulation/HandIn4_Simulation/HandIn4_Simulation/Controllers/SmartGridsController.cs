@@ -28,5 +28,25 @@ namespace HandIn4_Simulation.Controllers
             string responseBody = await mHttpClient.GetStringAsync(new Uri(mApiUrl + "/" + id.ToString()));
             return JsonConvert.DeserializeObject<SmartGrid>(responseBody);
         }
+
+        // POST: api/SmartGrids
+        public async Task<HttpResponseMessage> Post(SmartGrid smartGrid)
+        {
+            var content = JsonConvert.SerializeObject(smartGrid);
+            var buf = System.Text.Encoding.UTF8.GetBytes(content);
+            var byteArrayContent = new ByteArrayContent(buf);
+            byteArrayContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            var responseBody = await mHttpClient.PostAsync(new Uri(mApiUrl), byteArrayContent);
+            return responseBody;
+        }
+
+        // DELETE: api/SmartGrids
+        public async Task<HttpResponseMessage> Delete(int id)
+        {
+            var responseBody = await mHttpClient.DeleteAsync(new Uri(mApiUrl + "/" + id.ToString()));
+            return responseBody;
+        }
+
     }
 }

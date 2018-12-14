@@ -33,17 +33,16 @@ namespace HandIn4_Simulation.Controllers
 
 
         //// POST: api/TradersRepo
-        //public void PostTrader(Trader trader)
-        //{
-        //    _context.Add(trader);
-        //}
+        public async Task<HttpResponseMessage> Post(Trader trader)
+        {
+            var content = JsonConvert.SerializeObject(trader);
+            var buf = System.Text.Encoding.UTF8.GetBytes(content);
+            var byteArrayContent = new ByteArrayContent(buf);
+            byteArrayContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-        //// DELETE: api/TradersRepo/5
-        //public void DeleteTrader(int id)
-        //{
-        //    Trader trader = _context.GetById(id);
-        //    _context.Delete(trader);
-        //}
+            var responseBody = await mHttpClient.PostAsync(new Uri(mApiUrl), byteArrayContent);
+            return responseBody;
+        }
 
         //private bool TraderExists(int id)
         //{
