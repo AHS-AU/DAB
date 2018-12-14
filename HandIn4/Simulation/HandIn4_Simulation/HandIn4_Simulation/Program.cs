@@ -150,7 +150,7 @@ namespace HandIn4_Simulation
                 Console.WriteLine("\nBought " + Math.Abs(difference) + " kWh from powerplant");
             }
 
-            Console.WriteLine("\n\n");
+            Console.WriteLine("\n\nProgram has finished...");
             Console.ReadLine();
 
         }

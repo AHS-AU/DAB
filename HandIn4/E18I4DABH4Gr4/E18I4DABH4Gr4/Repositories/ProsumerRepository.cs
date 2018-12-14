@@ -10,7 +10,7 @@ namespace E18I4DABH4Gr4.Repositories
 {
     public class ProsumerRepository : Repository<Prosumer>, IProsumerRepository
     {
-        public ProsumerRepository() : base("prosumerDatabase", "prosumerCollection")
+        public ProsumerRepository() : base("E18I4DABH4Gr4", "prosumerCollection")
         {
 
         }
