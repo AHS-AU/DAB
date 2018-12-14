@@ -49,7 +49,7 @@ namespace HandIn4_Simulation
             // Calculate Producers- and Consumers kWhAmount
             var ProducersAmount = 0;
             var ConsumersAmount = 0;
-            foreach(var v in mProducers)
+            foreach (var v in mProducers)
             {
                 ProducersAmount += v.KWhAmount;
             }
@@ -76,7 +76,7 @@ namespace HandIn4_Simulation
 
                     //Console.WriteLine(">> " + producer.Name + " is selling " + Math.Abs(producer.KWhAmount) + " kWh");
                     //Console.WriteLine(">> " + consumer.Name + " is buying " + Math.Abs(consumer.KWhAmount) + " kWh\n");
-                    if(Math.Abs(consumer.KWhAmount) < producer.KWhAmount)
+                    if (Math.Abs(consumer.KWhAmount) < producer.KWhAmount)
                     {
                         producer.KWhAmount += consumer.KWhAmount;
                         Console.WriteLine(">>>> TRADE: " + consumer.Name + " has bought " + Math.Abs(consumer.KWhAmount) + " kWh from " + producer.Name);
@@ -92,7 +92,7 @@ namespace HandIn4_Simulation
                         mProsumerController.Put(producer.ProsumerId, producer).Wait();
                         mProsumerController.Put(consumer.ProsumerId, consumer).Wait();
                     }
-                    else if(Math.Abs(consumer.KWhAmount) > producer.KWhAmount)
+                    else if (Math.Abs(consumer.KWhAmount) > producer.KWhAmount)
                     {
                         consumer.KWhAmount += producer.KWhAmount;
                         Console.WriteLine(">>>> TRADE: " + consumer.Name + " has bought " + Math.Abs(producer.KWhAmount) + " kWh from " + producer.Name);
@@ -122,14 +122,14 @@ namespace HandIn4_Simulation
             // Remove Consumers and Producers if their kWhAmount equals 0.
             foreach (var producer in mProducers.ToList())
             {
-                if(producer.KWhAmount == 0)
+                if (producer.KWhAmount == 0)
                 {
                     mProducers.Remove(producer);
                 }
             }
             foreach (var consumer in mConsumers.ToList())
             {
-                if(consumer.KWhAmount == 0)
+                if (consumer.KWhAmount == 0)
                 {
                     mConsumers.Remove(consumer);
                 }
@@ -141,7 +141,7 @@ namespace HandIn4_Simulation
             mSmartGridsController.Post(mSmartGrid).Wait();
 
             // Check difference now and how much involved powerplant was as buy/sell
-            if(difference > 0)
+            if (difference > 0)
             {
                 Console.WriteLine("\nSold " + difference + " kWh to powerplant");
             }
